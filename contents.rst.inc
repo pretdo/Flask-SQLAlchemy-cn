@@ -27,7 +27,7 @@ API 参考
 附加说明
 ----------------
 
-See Flask's license_ for legal information governing this project.
+关于这个项目的法律信息请参阅 Flask 的 license_。
 
 .. toctree::
    :maxdepth: 2

@@ -1,17 +1,16 @@
 .. _quickstart:
 
-Quickstart
+快速入门
 ==========
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-Flask-SQLAlchemy is fun to use, incredibly easy for basic applications, and
-readily extends for larger applications.  For the complete guide, checkout
-the API documentation on the :class:`SQLAlchemy` class.
+Flask-SQLAlchemy 使用起来非常有趣，对于基本应用十分容易使用，并且对于大型项目易于扩展。有关完整的指南，请参阅 :class:`SQLAlchemy` 的 API 文档。
 
-A Minimal Application
----------------------
+一个最小应用
+---------------
 
+常见情况下对于只有一个 Flask 应用，所有你需要做的事情就是创建 Flask 应用，选择加载
 For the common case of having one Flask application all you have to do is
 to create your Flask application, load the configuration of choice and
 then create the :class:`SQLAlchemy` object by passing it the application.
@@ -68,7 +67,7 @@ Accessing the data in database is easy as a pie:
 >>> admin = User.query.filter_by(username='admin').first()
 <User u'admin'>
 
-Simple Relationships
+简单的关系
 --------------------
 
 SQLAlchemy connects to relational databases and what relational databases
@@ -131,7 +130,7 @@ are associated with our test “Python” category:
 [<Post 'Hello Python!'>]
 
 
-Road to Enlightenment
+启蒙之路
 ---------------------
 
 The only things you need to know compared to plain SQLAlchemy are:
