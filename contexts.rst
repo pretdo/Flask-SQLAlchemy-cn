@@ -2,9 +2,10 @@
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-Introduction into Contexts
+引入上下文
 ==========================
 
+如果您计划只使用一个应用程序，您大可跳过这一章节。
 If you are planning on using only one application you can largely skip
 this chapter.  Just pass your application to the :class:`SQLAlchemy`
 constructor and you're usually set.  However if you want to use more than

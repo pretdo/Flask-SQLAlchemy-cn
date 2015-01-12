@@ -34,28 +34,24 @@ Flask-SQLAlchemy 使用起来非常有趣，对于基本应用十分容易使用
         def __repr__(self):
             return '<User %r>' % self.username
 
-为了创建初始数据库，只需要从交互式 Python shell 中导入 `db` 对象并且调用 :meth:`SQLAlchemy.create_all` 方法来创建表和数据库
-To create the initial database, just import the `db` object from an
-interactive Python shell and run the
-:meth:`SQLAlchemy.create_all` method to create the
-tables and database:
+为了创建初始数据库，只需要从交互式 Python shell 中导入 `db` 对象并且调用 :meth:`SQLAlchemy.create_all` 方法来创建表和数据库:
 
 >>> from yourapplication import db
 >>> db.create_all()
 
-Boom, and there is your database.  Now to create some users:
+Boom, 您的数据库已经生成。现在来创建一些用户:
 
 >>> from yourapplication import User
 >>> admin = User('admin', 'admin@example.com')
 >>> guest = User('guest', 'guest@example.com')
 
-But they are not yet in the database, so let's make sure they are:
+但是它们还没有真正地写入到数据库中，因此让我们来确保它们已经写入到数据库中:
 
 >>> db.session.add(admin)
 >>> db.session.add(guest)
 >>> db.session.commit()
 
-Accessing the data in database is easy as a pie:
+访问数据库中的数据也是十分简单的:
 
 >>> users = User.query.all()
 [<User u'admin'>, <User u'guest'>]
@@ -65,9 +61,7 @@ Accessing the data in database is easy as a pie:
 简单的关系
 --------------------
 
-SQLAlchemy connects to relational databases and what relational databases
-are really good at are relations.  As such, we shall have an example of an
-application that uses two tables that have a relationship to each other::
+SQLAlchemy 连接到关系型数据库，关系型数据最擅长的东西就是关系。因此，我们将创建一个使用两张相互关联的表的应用作为例子::
 
 
     from datetime import datetime
@@ -105,21 +99,19 @@ application that uses two tables that have a relationship to each other::
         def __repr__(self):
             return '<Category %r>' % self.name
 
-First let's create some objects:
+首先让我们创建一些对象:
 
 >>> py = Category('Python')
 >>> p = Post('Hello Python!', 'Python is pretty cool', py)
 >>> db.session.add(py)
 >>> db.session.add(p)
 
-Now because we declared `posts` as dynamic relationship in the backref
-it shows up as query:
+现在因为我们在 backref 中声明了 `posts` 作为动态关系，查询显示为:
 
 >>> py.posts
 <sqlalchemy.orm.dynamic.AppenderBaseQuery object at 0x1027d37d0>
 
-It behaves like a regular query object so we can ask it for all posts that
-are associated with our test “Python” category:
+它的行为像一个普通的查询对象，因此我们可以查询与我们测试的 “Python” 分类相关的所有文章(posts):
 
 >>> py.posts.all()
 [<Post 'Hello Python!'>]
@@ -128,22 +120,17 @@ are associated with our test “Python” category:
 启蒙之路
 ---------------------
 
-The only things you need to know compared to plain SQLAlchemy are:
+您仅需要知道与普通的 SQLAlchemy 不同之处:
 
-1.  :class:`SQLAlchemy` gives you access to the following things:
+1.  :class:`SQLAlchemy` 允许您访问下面的东西:
 
-    -   all the functions and classes from :mod:`sqlalchemy` and
-        :mod:`sqlalchemy.orm`
-    -   a preconfigured scoped session called `session`
-    -   the :attr:`~SQLAlchemy.metadata`
-    -   the :attr:`~SQLAlchemy.engine`
-    -   a :meth:`SQLAlchemy.create_all` and :meth:`SQLAlchemy.drop_all`
-        methods to create and drop tables according to the models.
-    -   a :class:`Model` baseclass that is a configured declarative base.
+    -   :mod:`sqlalchemy` 和 :mod:`sqlalchemy.orm` 下所有的函数和类
+    -   一个叫做 `session` 的预配置范围的会话(session)
+    -   :attr:`~SQLAlchemy.metadata` 属性
+    -   :attr:`~SQLAlchemy.engine` 属性
+    -   :meth:`SQLAlchemy.create_all` 和 :meth:`SQLAlchemy.drop_all`，根据模型用来创建以及删除表格的方法
+    -   一个 :class:`Model` 基类，即是一个已配置的声明(declarative)的基础(base)
 
-2.  The :class:`Model` declarative base class behaves like a regular
-    Python class but has a `query` attribute attached that can be used to
-    query the model.  (:class:`Model` and :class:`BaseQuery`)
+2.  :class:`Model` 声明基类行为类似一个常规的 Python 类，不过有个 `query` 属性，可以用来查询模型 (:class:`Model` 和 :class:`BaseQuery`)
 
-3.  You have to commit the session, but you don't have to remove it at
-    the end of the request, Flask-SQLAlchemy does that for you.
+3.  你必须提交会话，但是没有必要在每个请求后删除它(session)，Flask-SQLAlchemy 会帮你完成删除操作
