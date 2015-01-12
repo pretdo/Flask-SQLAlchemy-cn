@@ -10,15 +10,9 @@ Flask-SQLAlchemy 使用起来非常有趣，对于基本应用十分容易使用
 一个最小应用
 ---------------
 
-常见情况下对于只有一个 Flask 应用，所有你需要做的事情就是创建 Flask 应用，选择加载
-For the common case of having one Flask application all you have to do is
-to create your Flask application, load the configuration of choice and
-then create the :class:`SQLAlchemy` object by passing it the application.
+常见情况下对于只有一个 Flask 应用，所有你需要做的事情就是创建 Flask 应用，选择加载配置接着创建 :class:`SQLAlchemy` 对象时候把 Flask 应用传递给它作为参数。
 
-Once created, that object then contains all the functions and helpers
-from both :mod:`sqlalchemy` and :mod:`sqlalchemy.orm`.  Furthermore it
-provides a class called `Model` that is a declarative base which can be
-used to declare models::
+一旦创建，这个对象就包含 :mod:`sqlalchemy` 和 :mod:`sqlalchemy.orm` 中的所有函数和助手。此外它还提供一个名为 `Model` 的类，用于作为声明 模型时的 delarative 基类::
 
     from flask import Flask
     from flask.ext.sqlalchemy import SQLAlchemy
@@ -40,6 +34,7 @@ used to declare models::
         def __repr__(self):
             return '<User %r>' % self.username
 
+为了创建初始数据库，只需要从交互式 Python shell 中导入 `db` 对象并且调用 :meth:`SQLAlchemy.create_all` 方法来创建表和数据库
 To create the initial database, just import the `db` object from an
 interactive Python shell and run the
 :meth:`SQLAlchemy.create_all` method to create the
