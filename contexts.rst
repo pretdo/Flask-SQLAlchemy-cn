@@ -5,16 +5,9 @@
 引入上下文
 ==========================
 
-如果您计划只使用一个应用程序，您大可跳过这一章节。
-If you are planning on using only one application you can largely skip
-this chapter.  Just pass your application to the :class:`SQLAlchemy`
-constructor and you're usually set.  However if you want to use more than
-one application or create the application dynamically in a function you
-want to read on.
+如果您计划只使用一个应用程序，您大可跳过这一章节。只需要把您的应用程序传给 :class:`SQLAlchemy` 构造函数，一般情况下您就设置好了。然而您想要使用不止一个应用或者在一个函数中动态地创建应用的话，您需要仔细阅读。
 
-If you define your application in a function, but the :class:`SQLAlchemy`
-object globally, how does the latter learn about the former?  The answer
-is the :meth:`~SQLAlchemy.init_app` function::
+如果您在一个函数中定义您的应用，但是 :class:`SQLAlchemy` 对象是全局的，后者如何知道前者了？答案就是 :meth:`~SQLAlchemy.init_app` 函数::
 
     from flask import Flask
     from flask.ext.sqlalchemy import SQLAlchemy
