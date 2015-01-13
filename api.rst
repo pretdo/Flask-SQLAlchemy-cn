@@ -3,10 +3,9 @@ API
 
 .. module:: flask.ext.sqlalchemy
 
-This part of the documentation documents all the public classes and
-functions in Flask-SQLAlchemy.
+这部分文档记录了 Flask-SQLAlchemy 里的所有公开的类和函数。
 
-Configuration
+配置
 `````````````
 
 .. autoclass:: SQLAlchemy
@@ -16,7 +15,7 @@ Configuration
 
       The :class:`BaseQuery` class.
 
-Models
+模型
 ``````
 
 .. autoclass:: Model
@@ -55,13 +54,13 @@ Models
       doesn’t contain any rows.  This results in an execution of the
       underlying query.
     
-Sessions
+会话
 ````````
 
 .. autoclass:: SignallingSession
    :members:
 
-Utilities
+实用工具
 `````````
 
 .. autoclass:: Pagination

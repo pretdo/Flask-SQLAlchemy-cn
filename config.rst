@@ -1,28 +1,22 @@
-Configuration
+配置
 =============
 
-The following configuration values exist for Flask-SQLAlchemy.
-Flask-SQLAlchemy loads these values from your main Flask config which can
-be populated in various ways.  Note that some of those cannot be modified
-after the engine was created so make sure to configure as early as
-possible and to not modify them at runtime.
+下面是 Flask-SQLAlchemy 中存在的配置值。Flask-SQLAlchemy 从你的 Flask 主配置中加载这些值。 注意其中的一些在引擎创建后不能修改，所以确保尽早配置且不在运行时修改它们。
 
-Configuration Keys
+配置键
 ------------------
 
-A list of configuration keys currently understood by the extension:
+Flask-SQLAlchemy 扩展能够识别的配置键的清单:
 
 .. tabularcolumns:: |p{6.5cm}|p{8.5cm}|
 
 ================================== =========================================
-``SQLALCHEMY_DATABASE_URI``        The database URI that should be used for
-                                   the connection.  Examples:
+``SQLALCHEMY_DATABASE_URI``        用于连接数据的数据库。例如：
 
                                    - ``sqlite:////tmp/test.db``
                                    - ``mysql://username:password@server/db``
-``SQLALCHEMY_BINDS``               A dictionary that maps bind keys to
-                                   SQLAlchemy connection URIs.  For more
-                                   information about binds see :ref:`binds`.
+``SQLALCHEMY_BINDS``               一个映射绑定 (bind) 键到 
+                                   SQLAlchemy 连接 URIs                              的字典。更多的信息请参阅 :ref:`binds`。
 ``SQLALCHEMY_ECHO``                If set to `True` SQLAlchemy will log all
                                    the statements issued to stderr which can
                                    be useful for debugging.
@@ -61,21 +55,20 @@ A list of configuration keys currently understood by the extension:
 ================================== =========================================
 
 .. versionadded:: 0.8
-   The ``SQLALCHEMY_NATIVE_UNICODE``, ``SQLALCHEMY_POOL_SIZE``,
-   ``SQLALCHEMY_POOL_TIMEOUT`` and ``SQLALCHEMY_POOL_RECYCLE``
-   configuration keys were added.
+   增加 ``SQLALCHEMY_NATIVE_UNICODE``, ``SQLALCHEMY_POOL_SIZE``,
+   ``SQLALCHEMY_POOL_TIMEOUT`` 和 ``SQLALCHEMY_POOL_RECYCLE`` 配置键。
 
 .. versionadded:: 0.12
-   The ``SQLALCHEMY_BINDS`` configuration key was added.
+   增加 ``SQLALCHEMY_BINDS`` 配置键。
 
 .. versionadded:: 0.17
-   The ``SQLALCHEMY_MAX_OVERFLOW`` configuration key was added.
+   增加 ``SQLALCHEMY_MAX_OVERFLOW`` 配置键。
 
 .. versionadded:: 2.0
-   The ``SQLALCHEMY_TRACK_MODIFICATIONS`` configuration key was added.
+   增加 ``SQLALCHEMY_TRACK_MODIFICATIONS`` 配置键。
 
-Connection URI Format
----------------------
+连接 URI 格式
+-----------------
 
 For a complete list of connection URIs head over to the SQLAlchemy
 documentation under (`Supported Databases
