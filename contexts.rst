@@ -19,11 +19,9 @@
         db.init_app(app)
         return app
 
-它所做的是准备应用以与 :class:`SQLAlchemy` 共同工作。然而现在不把 :class:`SQLAlchemy` 对象 绑定到您的应用。为什么不这么做？ 因为那里可能创建不止一个应用。
+它所做的是准备应用以与 :class:`SQLAlchemy` 共同工作。然而现在不把 :class:`SQLAlchemy` 对象绑定到您的应用。为什么不这么做？ 因为那里可能创建不止一个应用。
 
-那么 :class:`SQLAlchemy` 是如何知道您的应用的？你必须配置一个应用上下文。如果你在一个 Flask 视图函数中进行工作，这会自动实现。但如果你在交互式 的 shell 中，你需要手动这么做。
-(参阅 `创建应用上下文
-<http://flask.pocoo.org/docs/appcontext/#creating-an-application-context>`_)。
+那么 :class:`SQLAlchemy` 是如何知道您的应用的？你必须配置一个应用上下文。如果你在一个 Flask 视图函数中进行工作，这会自动实现。但如果你在交互式的 shell 中，你需要手动这么做。(参阅 `创建应用上下文<http://flask.pocoo.org/docs/appcontext/#creating-an-application-context>`_)。
 
 简而言之，像这样做:
 

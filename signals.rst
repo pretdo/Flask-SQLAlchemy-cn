@@ -1,12 +1,11 @@
-Signalling Support
+信号支持
 ==================
 
 .. versionadded:: 0.10
 
-Starting with Flask-SQLAlchemy 0.10 you can now connect to signals to get
-notifications when certain things happen.
+从 Flask-SQLALchemy 0.10 开始，你可以订阅信号来获取通知当发生某种特定的事件。
 
-The following two signals exist:
+存在以下两个信号:
 
 .. data:: models_committed
 

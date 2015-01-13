@@ -2,7 +2,7 @@
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-Declaring Models
+声明模型
 ================
 
 Generally Flask-SQLAlchemy behaves like a properly configured declarative
@@ -20,7 +20,7 @@ Things to keep in mind:
     for you unless overridden.  It's derived from the class name converted
     to lowercase and with “CamelCase” converted to “camel_case”.
 
-Simple Example
+简单示例
 --------------
 
 A very simple example::
@@ -61,7 +61,7 @@ types are the most common:
 `LargeBinary`       stores large arbitrary binary data
 =================== =====================================
 
-One-to-Many Relationships
+一-对-多关系
 -------------------------
 
 The most common relationships are one-to-many relationships.  Because
@@ -118,7 +118,7 @@ How do you define the lazy status for backrefs?  By using the
         addresses = db.relationship('Address',
             backref=db.backref('person', lazy='joined'), lazy='dynamic')
 
-Many-to-Many Relationships
+多-对-多关系
 --------------------------
 
 If you want to use many-to-many relationships you will need to define a
