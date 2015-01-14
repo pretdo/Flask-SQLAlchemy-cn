@@ -5,27 +5,16 @@
 绑定多个数据库
 =============================
 
-从 0.12 开始， Flask-SQLAlchemy 可以容易地连接到多个数据库。为了实现这个功能，预配置了 SQLAlchemy 来支持多个 “binds”。
+从 0.12 开始，Flask-SQLAlchemy 可以容易地连接到多个数据库。为了实现这个功能，预配置了 SQLAlchemy 来支持多个 “binds”。
 
-什么是绑定(binds)?在 SQLAlchemy 中一个绑定(bind)是能执行 SQL 语句并且通常是一个连接或者引擎类的东东。在 Flask-SQLAlchemy 中，绑定(bind)总是背后自动为您创建好的引擎。
+什么是绑定(binds)? 在 SQLAlchemy 中一个绑定(bind)是能执行 SQL 语句并且通常是一个连接或者引擎类的东东。在 Flask-SQLAlchemy 中，绑定(bind)总是背后自动为您创建好的引擎。这些引擎中的每个之后都会关联一个短键（bind key）。这个键会在模型声明时使用来把一个模型关联到一个特定引擎。
 
-What are binds?  In SQLAlchemy speak a bind is something that can execute
-SQL statements and is usually a connection or engine.  In Flask-SQLAlchemy
-binds are always engines that are created for you automatically behind the
-scenes.  Each of these engines is then associated with a short key (the
-bind key).  This key is then used at model declaration time to assocate a
-model with a specific engine.
-
-If no bind key is specified for a model the default connection is used
-instead (as configured by ``SQLALCHEMY_DATABASE_URI``).
+如果模型没有关联一个特定的引擎的话，就会使用默认的连接(``SQLALCHEMY_DATABASE_URI`` 配置值)。
 
 示例配置
 ---------------------
 
-The following configuration declares three database connections.  The
-special default one as well as two others named `users` (for the users)
-and `appmeta` (which connects to a sqlite database for read only access to
-some data the application provides internally)::
+下面的配置声明了三个数据库连接。特殊的默认值和另外两个分别名为 `users`（用于用户）和 `appmeta` 连接到一个提供只读访问应用内部数据的 sqlite 数据库）::
 
     SQLALCHEMY_DATABASE_URI = 'postgres://localhost/main'
     SQLALCHEMY_BINDS = {
