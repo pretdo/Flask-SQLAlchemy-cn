@@ -22,5 +22,4 @@
 
 .. data:: before_models_committed
 
-   Works exactly the same as :data:`models_committed` but is emitted
-   right before the committing takes place.
+   工作机制和 :data:`models_committed` 完全一样，但是在提交之前发送。
