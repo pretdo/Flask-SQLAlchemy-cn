@@ -2,12 +2,12 @@
 
 .. currentmodule:: flask.ext.sqlalchemy
 
-Multiple Databases with Binds
+绑定多个数据库
 =============================
 
-Starting with 0.12 Flask-SQLAlchemy can easily connect to multiple
-databases.  To achieve that it preconfigures SQLAlchemy to support
-multiple “binds”.
+从 0.12 开始， Flask-SQLAlchemy 可以容易地连接到多个数据库。为了实现这个功能，预配置了 SQLAlchemy 来支持多个 “binds”。
+
+什么是绑定(binds)?在 SQLAlchemy 中一个绑定(bind)是能执行 SQL 语句并且通常是一个连接或者引擎类的东东。在 Flask-SQLAlchemy 中，绑定(bind)总是背后自动为您创建好的引擎。
 
 What are binds?  In SQLAlchemy speak a bind is something that can execute
 SQL statements and is usually a connection or engine.  In Flask-SQLAlchemy
@@ -19,7 +19,7 @@ model with a specific engine.
 If no bind key is specified for a model the default connection is used
 instead (as configured by ``SQLALCHEMY_DATABASE_URI``).
 
-Example Configuration
+示例配置
 ---------------------
 
 The following configuration declares three database connections.  The
@@ -33,7 +33,7 @@ some data the application provides internally)::
         'appmeta':      'sqlite:////path/to/appmeta.db'
     }
 
-Creating and Dropping Tables
+创建和删除表
 ----------------------------
 
 The :meth:`~SQLAlchemy.create_all` and :meth:`~SQLAlchemy.drop_all` methods
