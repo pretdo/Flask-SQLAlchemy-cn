@@ -25,31 +25,24 @@
 创建和删除表
 ----------------------------
 
-The :meth:`~SQLAlchemy.create_all` and :meth:`~SQLAlchemy.drop_all` methods
-by default operate on all declared binds, including the default one.  This
-behavior can be customized by providing the `bind` parameter.  It takes
-either a single bind name, ``'__all__'`` to refer to all binds or a list
-of binds.  The default bind (``SQLALCHEMY_DATABASE_URI``) is named `None`:
+:meth:`~SQLAlchemy.create_all` 和 :meth:`~SQLAlchemy.drop_all` 方法默认作用于所有声明的绑定(bind)，包括默认的。这个行为可以通过提供 `bind` 参数来定制。它可以是单个绑定(bind)名, ``'__all__'`` 指向所有绑定(binds)或一个绑定(bind)名的列表。默认的绑定(bind)(``SQLALCHEMY_DATABASE_URI``) 名为 `None`:
 
 >>> db.create_all()
 >>> db.create_all(bind=['users'])
 >>> db.create_all(bind='appmeta')
 >>> db.drop_all(bind=None)
 
-Referring to Binds
+引用绑定(Binds)
 ------------------
 
-If you declare a model you can specify the bind to use with the
-:attr:`~Model.__bind_key__` attribute::
+当您声明模型时，您可以用 :attr:`~Model.__bind_key__` 属性指定绑定(bind)::
 
     class User(db.Model):
         __bind_key__ = 'users'
         id = db.Column(db.Integer, primary_key=True)
         username = db.Column(db.String(80), unique=True)
 
-Internally the bind key is stored in the table's `info` dictionary as
-``'bind_key'``.  This is important to know because when you want to create
-a table object directly you will have to put it in there::
+bind key 存储在表中的 `info` 字典中作为 ``'bind_key'`` 键值。了解这个很重要，因为当您想要直接创建一个表对象时，您会需要把它放在那::
 
     user_favorites = db.Table('user_favorites',
         db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
@@ -57,6 +50,5 @@ a table object directly you will have to put it in there::
         info={'bind_key': 'users'}
     )
 
-If you specified the `__bind_key__` on your models you can use them exactly the
-way you are used to.  The model connects to the specified database connection 
-itself.
+如果您在模型上指定了 `__bind_key__` ，您可以用它们准确地做您想要的。模型会自行连 接到指定的数据库连接。
+
