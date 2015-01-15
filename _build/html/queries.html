@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>选择(Select),插入(Insert), 删除(Delete) &mdash; Flask-SQLAlchemy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Flask-SQLAlchemy 1.0 documentation" href="index.html" />
+    <link rel="next" title="绑定多个数据库" href="binds.html" />
+    <link rel="prev" title="声明模型" href="models.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="binds.html" title="绑定多个数据库"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="声明模型"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Flask-SQLAlchemy 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="select-insert-delete">
+<h1>选择(Select),插入(Insert), 删除(Delete)<a class="headerlink" href="#select-insert-delete" title="Permalink to this headline">¶</a></h1>
+<p>现在您已经有了 <a class="reference internal" href="models.html#models"><em>declared models</em></a>，是时候从数据库中查询数据。我们将会使用 <a class="reference internal" href="quickstart.html#quickstart"><em>快速入门</em></a> 章节中定义的数据模型。</p>
+<div class="section" id="id1">
+<h2>插入记录<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>在查询数据之前我们必须先插入数据。您的所有模型都应该有一个构造函数，如果您 忘记了，请确保加上一个。只有您自己使用这些构造函数而 SQLAlchemy 在内部不会使用它， 所以如何定义这些构造函数完全取决与您。</p>
+<p>向数据库插入数据分为三个步骤:</p>
+<ol class="arabic simple">
+<li>创建 Python 对象</li>
+<li>把它添加到会话</li>
+<li>提交会话</li>
+</ol>
+<p>这里的会话不是 Flask 的会话，而是 Flask-SQLAlchemy 的会话。它本质上是一个 数据库事务的加强版本。它是这样工作的:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yourapp</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">me</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="s">&#39;admin&#39;</span><span class="p">,</span> <span class="s">&#39;admin@example.com&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">me</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>好吧，这不是很难吧。但是在您把对象添加到会话之前， SQLAlchemy 基本不考虑把它加到事务中。这是好事，因为您仍然可以放弃更改。比如想象 在一个页面上创建文章，但是您只想把文章传递给模板来预览渲染，而不是把它存进数据库。</p>
+<p>调用 <tt class="xref py py-func docutils literal"><span class="pre">add()</span></tt> 函数会添加对象。它会发出一个 <cite>INSERT</cite> 语句给数据库，但是由于事务仍然没有提交，您不会立即得到返回的 ID 。如果您提交，您的用户会有一个 ID:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">me</span><span class="o">.</span><span class="n">id</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>删除记录<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>删除记录是十分类似的，使用 <tt class="xref py py-func docutils literal"><span class="pre">delete()</span></tt> 代替 <tt class="xref py py-func docutils literal"><span class="pre">add()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">me</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h2>查询记录<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>那么我们怎么从数据库中查询数据？为此，Flask-SQLAlchemy 在您的 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.Model" title="flask.ext.sqlalchemy.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> 类上提供了 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.Model.query" title="flask.ext.sqlalchemy.Model.query"><tt class="xref py py-attr docutils literal"><span class="pre">query</span></tt></a> 属性。当您访问它时，您会得到一个新的所有记录的查询对象。在使用 <tt class="xref py py-func docutils literal"><span class="pre">all()</span></tt> 或者 <tt class="xref py py-func docutils literal"><span class="pre">first()</span></tt> 发起查询之前可以使用方法 <tt class="xref py py-func docutils literal"><span class="pre">filter()</span></tt> 来过滤记录。如果您想要用主键查询的话，也可以使用 <tt class="xref py py-func docutils literal"><span class="pre">get()</span></tt>。</p>
+<p>下面的查询假设数据库中有如下条目:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="26%" />
+<col width="49%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><cite>id</cite></td>
+<td><cite>username</cite></td>
+<td><cite>email</cite></td>
+</tr>
+<tr class="row-even"><td>1</td>
+<td>admin</td>
+<td><a class="reference external" href="mailto:admin&#37;&#52;&#48;example&#46;com">admin<span>&#64;</span>example<span>&#46;</span>com</a></td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>peter</td>
+<td><a class="reference external" href="mailto:peter&#37;&#52;&#48;example&#46;org">peter<span>&#64;</span>example<span>&#46;</span>org</a></td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>guest</td>
+<td><a class="reference external" href="mailto:guest&#37;&#52;&#48;example&#46;com">guest<span>&#64;</span>example<span>&#46;</span>com</a></td>
+</tr>
+</tbody>
+</table>
+<p>通过用户名查询用户:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">peter</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;peter&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">peter</span><span class="o">.</span><span class="n">id</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">peter</span><span class="o">.</span><span class="n">email</span>
+<span class="go">u&#39;peter@example.org&#39;</span>
+</pre></div>
+</div>
+<p>同上但是查询一个不存在的用户名返回 <cite>None</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">missing</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s">&#39;missing&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">missing</span> <span class="ow">is</span> <span class="bp">None</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>使用更复杂的表达式查询一些用户:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">email</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;@example.com&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="go">[&lt;User u&#39;admin&#39;&gt;, &lt;User u&#39;guest&#39;&gt;]</span>
+</pre></div>
+</div>
+<p>按某种规则对用户排序:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">User</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+<span class="go">[&lt;User u&#39;admin&#39;&gt;, &lt;User u&#39;guest&#39;&gt;, &lt;User u&#39;peter&#39;&gt;]</span>
+</pre></div>
+</div>
+<p>限制返回用户的数量:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="go">[&lt;User u&#39;admin&#39;&gt;]</span>
+</pre></div>
+</div>
+<p>用主键查询用户:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">&lt;User u&#39;admin&#39;&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>在视图中查询<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>当您编写 Flask 视图函数，对于不存在的条目返回一个 404 错误是非常方便的。因为这是一个很常见的问题，Flask-SQLAlchemy 为了解决这个问题提供了一个帮助函数。可以使用 <tt class="xref py py-meth docutils literal"><span class="pre">get_or_404()</span></tt> 来代替 <a class="reference external" href="http://www.sqlalchemy.org/docs/orm/query.html#sqlalchemy.orm.query.Query.get" title="(in SQLAlchemy v0.9)"><tt class="xref py py-meth docutils literal"><span class="pre">get()</span></tt></a>，使用 <tt class="xref py py-meth docutils literal"><span class="pre">first_or_404()</span></tt> 来代替 <a class="reference external" href="http://www.sqlalchemy.org/docs/orm/query.html#sqlalchemy.orm.query.Query.first" title="(in SQLAlchemy v0.9)"><tt class="xref py py-meth docutils literal"><span class="pre">first()</span></tt></a>。这样会抛出一个 404 错误，而不是返回 <cite>None</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.route</span><span class="p">(</span><span class="s">&#39;/user/&lt;username&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">show_user</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">first_or_404</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s">&#39;show_user.html&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+  <img class="logo" src="_static/flask-sqlalchemy-small.png" alt="Logo"
+    style="margin-left: -10px"/>
+</a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">选择(Select),插入(Insert), 删除(Delete)</a><ul>
+<li><a class="reference internal" href="#id1">插入记录</a></li>
+<li><a class="reference internal" href="#id2">删除记录</a></li>
+<li><a class="reference internal" href="#id3">查询记录</a></li>
+<li><a class="reference internal" href="#id4">在视图中查询</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="models.html" title="previous chapter">声明模型</a></li>
+      <li>Next: <a href="binds.html" title="next chapter">绑定多个数据库</a></li>
+  </ul></li>
+</ul>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/queries.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2010-2014, Armin Ronacher.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>

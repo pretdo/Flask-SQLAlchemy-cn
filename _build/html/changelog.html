@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>更新历史 &mdash; Flask-SQLAlchemy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Flask-SQLAlchemy 1.0 documentation" href="index.html" />
+    <link rel="prev" title="API" href="api.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Flask-SQLAlchemy 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>更新历史<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>在这里您可以看到每一个 Flask-SQLAlchemy 发布版本的变化的完整列表。</p>
+<div class="section" id="version-2-1">
+<h2>Version 2.1<a class="headerlink" href="#version-2-1" title="Permalink to this headline">¶</a></h2>
+<p>In development</p>
+<ul class="simple">
+<li>Table names are automatically generated in more cases, including
+subclassing mixins and abstract models.</li>
+</ul>
+</div>
+<div class="section" id="version-2-0">
+<h2>Version 2.0<a class="headerlink" href="#version-2-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on August 29th 2014, codename Bohrium</p>
+<ul class="simple">
+<li>Changed how the builtin signals are subscribed to skip non Flask-SQLAlchemy
+sessions.  This will also fix the attribute error about model changes
+not existing.</li>
+<li>Added a way to control how signals for model modifications are tracked.</li>
+<li>Made the <tt class="docutils literal"><span class="pre">SignallingSession</span></tt> a public interface and added a hook
+for customizing session creation.</li>
+<li>If the <tt class="docutils literal"><span class="pre">bind</span></tt> parameter is given to the signalling session it will no
+longer cause an error that a parameter is given twice.</li>
+<li>Added working table reflection support.</li>
+<li>Enabled autoflush by default.</li>
+<li>Consider <tt class="docutils literal"><span class="pre">SQLALCHEMY_COMMIT_ON_TEARDOWN</span></tt> harmful and remove from docs.</li>
+</ul>
+</div>
+<div class="section" id="version-1-0">
+<h2>Version 1.0<a class="headerlink" href="#version-1-0" title="Permalink to this headline">¶</a></h2>
+<p>Released on July 20th 2013, codename Aurum</p>
+<ul class="simple">
+<li>Added Python 3.3 support.</li>
+<li>Dropped 2.5 compatibility.</li>
+<li>Various bugfixes</li>
+<li>Changed versioning format to do major releases for each update now.</li>
+</ul>
+</div>
+<div class="section" id="version-0-16">
+<h2>Version 0.16<a class="headerlink" href="#version-0-16" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>New distribution format (flask_sqlalchemy)</li>
+<li>Added support for Flask 0.9 specifics.</li>
+</ul>
+</div>
+<div class="section" id="version-0-15">
+<h2>Version 0.15<a class="headerlink" href="#version-0-15" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added session support for multiple databases</li>
+</ul>
+</div>
+<div class="section" id="version-0-14">
+<h2>Version 0.14<a class="headerlink" href="#version-0-14" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Make relative sqlite paths relative to the application root.</li>
+</ul>
+</div>
+<div class="section" id="version-0-13">
+<h2>Version 0.13<a class="headerlink" href="#version-0-13" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed an issue with Flask-SQLAlchemy not selecting the correct binds.</li>
+</ul>
+</div>
+<div class="section" id="version-0-12">
+<h2>Version 0.12<a class="headerlink" href="#version-0-12" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added support for multiple databases.</li>
+<li>Expose Flask-SQLAlchemy&#8217;s BaseQuery as <cite>db.Query</cite>.</li>
+<li>Set default query_class for <cite>db.relation</cite>, <cite>db.relationship</cite>, and
+<cite>db.dynamic_loader</cite> to Flask-SQLAlchemy&#8217;s BaseQuery.</li>
+<li>Improved compatibility with Flask 0.7.</li>
+</ul>
+</div>
+<div class="section" id="version-0-11">
+<h2>Version 0.11<a class="headerlink" href="#version-0-11" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed a bug introduced in 0.10 with alternative table constructors.</li>
+</ul>
+</div>
+<div class="section" id="version-0-10">
+<h2>Version 0.10<a class="headerlink" href="#version-0-10" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added support for signals.</li>
+<li>Table names are now automatically set from the class name unless
+overriden.</li>
+<li>Model.query now always works for applications directly passed to
+the SQLAlchemy constructor.  Furthermore the property now raises
+an RuntimeError instead of being None.</li>
+<li>added session options to constructor.</li>
+<li>fixed a broken <cite>__repr__</cite></li>
+<li><cite>db.Table</cite> is now a factor function that creates table objects.
+This makes it possible to omit the metadata.</li>
+</ul>
+</div>
+<div class="section" id="version-0-9">
+<h2>Version 0.9<a class="headerlink" href="#version-0-9" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>applied changes to pass the Flask extension approval process.</li>
+</ul>
+</div>
+<div class="section" id="version-0-8">
+<h2>Version 0.8<a class="headerlink" href="#version-0-8" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>added a few configuration keys for creating connections.</li>
+<li>automatically activate connection recycling for MySQL connections.</li>
+<li>added support for the Flask testing mode.</li>
+</ul>
+</div>
+<div class="section" id="version-0-7">
+<h2>Version 0.7<a class="headerlink" href="#version-0-7" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Initial public release</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+  <img class="logo" src="_static/flask-sqlalchemy-small.png" alt="Logo"
+    style="margin-left: -10px"/>
+</a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">更新历史</a><ul>
+<li><a class="reference internal" href="#version-2-1">Version 2.1</a></li>
+<li><a class="reference internal" href="#version-2-0">Version 2.0</a></li>
+<li><a class="reference internal" href="#version-1-0">Version 1.0</a></li>
+<li><a class="reference internal" href="#version-0-16">Version 0.16</a></li>
+<li><a class="reference internal" href="#version-0-15">Version 0.15</a></li>
+<li><a class="reference internal" href="#version-0-14">Version 0.14</a></li>
+<li><a class="reference internal" href="#version-0-13">Version 0.13</a></li>
+<li><a class="reference internal" href="#version-0-12">Version 0.12</a></li>
+<li><a class="reference internal" href="#version-0-11">Version 0.11</a></li>
+<li><a class="reference internal" href="#version-0-10">Version 0.10</a></li>
+<li><a class="reference internal" href="#version-0-9">Version 0.9</a></li>
+<li><a class="reference internal" href="#version-0-8">Version 0.8</a></li>
+<li><a class="reference internal" href="#version-0-7">Version 0.7</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="api.html" title="previous chapter">API</a></li>
+  </ul></li>
+</ul>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/changelog.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2010-2014, Armin Ronacher.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>

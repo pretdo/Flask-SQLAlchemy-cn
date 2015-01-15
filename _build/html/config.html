@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>配置 &mdash; Flask-SQLAlchemy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Flask-SQLAlchemy 1.0 documentation" href="index.html" />
+    <link rel="next" title="声明模型" href="models.html" />
+    <link rel="prev" title="引入上下文" href="contexts.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="models.html" title="声明模型"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="contexts.html" title="引入上下文"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Flask-SQLAlchemy 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>配置<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>下面是 Flask-SQLAlchemy 中存在的配置值。Flask-SQLAlchemy 从您的 Flask 主配置中加载这些值。 注意其中的一些在引擎创建后不能修改，所以确保尽早配置且不在运行时修改它们。</p>
+<div class="section" id="id2">
+<h2>配置键<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Flask-SQLAlchemy 扩展能够识别的配置键的清单:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_DATABASE_URI</span></tt></td>
+<td><p class="first">用于连接数据的数据库。例如：</p>
+<ul class="last simple">
+<li><tt class="docutils literal"><span class="pre">sqlite:////tmp/test.db</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">mysql://username:password&#64;server/db</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_BINDS</span></tt></td>
+<td>一个映射绑定 (bind) 键到
+SQLAlchemy 连接 URIs 的字典。
+更多的信息请参阅 <a class="reference internal" href="binds.html#binds"><em>绑定多个数据库</em></a>。</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_ECHO</span></tt></td>
+<td>如果设置成 <cite>True</cite>，SQLAlchemy 将会记录所有
+发到标准输出(stderr)的语句，这对调试很有帮助。</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_RECORD_QUERIES</span></tt></td>
+<td>可以用于显式地禁用或者启用查询记录。查询记录
+在调试或者测试模式下自动启用。更多信息请参阅
+<tt class="xref py py-func docutils literal"><span class="pre">get_debug_queries()</span></tt>。</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_NATIVE_UNICODE</span></tt></td>
+<td>可以用于显式地禁用支持原生的 unicode。这是
+某些数据库适配器必须的（像在 Ubuntu 某些版本上的
+PostgreSQL），当使用不合适的指定无编码的数据库
+默认值时。</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_POOL_SIZE</span></tt></td>
+<td>数据库连接池的大小。默认是数据库引擎的默认值
+（通常是 5）。</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_POOL_TIMEOUT</span></tt></td>
+<td>指定数据库连接池的超时时间。默认是 10。</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_POOL_RECYCLE</span></tt></td>
+<td>自动回收连接的秒数。这对 MySQL 是必须的，默认
+情况下 MySQL 会自动移除闲置 8 小时或者以上的连接。
+需要注意地是如果使用 MySQL 的话，
+Flask-SQLAlchemy 会自动地设置这个值为 2 小时。</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_MAX_OVERFLOW</span></tt></td>
+<td>控制在连接池达到最大值后可以创建的连接数。当这些额外的
+连接回收到连接池后将会被断开和抛弃。</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">SQLALCHEMY_TRACK_MODIFICATIONS</span></tt></td>
+<td>如果设置成 <cite>True</cite> (默认情况)，Flask-SQLAlchemy
+将会追踪对象的修改并且发送信号。这需要额外的内存，
+如果不必要的可以禁用它。</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.8: </span>增加 <tt class="docutils literal"><span class="pre">SQLALCHEMY_NATIVE_UNICODE</span></tt>, <tt class="docutils literal"><span class="pre">SQLALCHEMY_POOL_SIZE</span></tt>,
+<tt class="docutils literal"><span class="pre">SQLALCHEMY_POOL_TIMEOUT</span></tt> 和 <tt class="docutils literal"><span class="pre">SQLALCHEMY_POOL_RECYCLE</span></tt> 配置键。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.12: </span>增加 <tt class="docutils literal"><span class="pre">SQLALCHEMY_BINDS</span></tt> 配置键。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.17: </span>增加 <tt class="docutils literal"><span class="pre">SQLALCHEMY_MAX_OVERFLOW</span></tt> 配置键。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 2.0: </span>增加 <tt class="docutils literal"><span class="pre">SQLALCHEMY_TRACK_MODIFICATIONS</span></tt> 配置键。</p>
+</div>
+</div>
+<div class="section" id="uri">
+<h2>连接 URI 格式<a class="headerlink" href="#uri" title="Permalink to this headline">¶</a></h2>
+<p>完整连接 URI 格式列表请跳转到 SQLAlchemy 下面的文档(<a class="reference external" href="http://www.sqlalchemy.org/docs/core/engines.html">支持的数据库</a>)。这里展示了一些常见的连接字符串。</p>
+<p>SQLAlchemy 把一个引擎的源表示为一个连同设定引擎选项的可选字符串参数的 URI。URI 的形式是:</p>
+<div class="highlight-python"><div class="highlight"><pre>dialect+driver://username:password@host:port/database
+</pre></div>
+</div>
+<p>该字符串中的许多部分是可选的。如果没有指定驱动器，会选择默认的（确保在这种情况下 <em>不</em> 包含 <tt class="docutils literal"><span class="pre">+</span></tt> ）。</p>
+<p>Postgres:</p>
+<div class="highlight-python"><div class="highlight"><pre>postgresql://scott:tiger@localhost/mydatabase
+</pre></div>
+</div>
+<p>MySQL:</p>
+<div class="highlight-python"><div class="highlight"><pre>mysql://scott:tiger@localhost/mydatabase
+</pre></div>
+</div>
+<p>Oracle:</p>
+<div class="highlight-python"><div class="highlight"><pre>oracle://scott:tiger@127.0.0.1:1521/sidname
+</pre></div>
+</div>
+<p>SQLite (注意开头的四个斜线):</p>
+<div class="highlight-python"><div class="highlight"><pre>sqlite:////absolute/path/to/foo.db
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+  <img class="logo" src="_static/flask-sqlalchemy-small.png" alt="Logo"
+    style="margin-left: -10px"/>
+</a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">配置</a><ul>
+<li><a class="reference internal" href="#id2">配置键</a></li>
+<li><a class="reference internal" href="#uri">连接 URI 格式</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="contexts.html" title="previous chapter">引入上下文</a></li>
+      <li>Next: <a href="models.html" title="next chapter">声明模型</a></li>
+  </ul></li>
+</ul>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/config.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2010-2014, Armin Ronacher.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>

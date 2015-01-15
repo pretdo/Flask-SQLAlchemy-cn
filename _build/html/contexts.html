@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>引入上下文 &mdash; Flask-SQLAlchemy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Flask-SQLAlchemy 1.0 documentation" href="index.html" />
+    <link rel="next" title="配置" href="config.html" />
+    <link rel="prev" title="快速入门" href="quickstart.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="config.html" title="配置"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="快速入门"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Flask-SQLAlchemy 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="contexts">
+<span id="id1"></span><h1>引入上下文<a class="headerlink" href="#contexts" title="Permalink to this headline">¶</a></h1>
+<p>如果您计划只使用一个应用程序，您大可跳过这一章节。只需要把您的应用程序传给 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><tt class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></tt></a> 构造函数，一般情况下您就设置好了。然而您想要使用不止一个应用或者在一个函数中动态地创建应用的话，您需要仔细阅读。</p>
+<p>如果您在一个函数中定义您的应用，但是 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><tt class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></tt></a> 对象是全局的，后者如何知道前者了？答案就是 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.SQLAlchemy.init_app" title="flask.ext.sqlalchemy.SQLAlchemy.init_app"><tt class="xref py py-meth docutils literal"><span class="pre">init_app()</span></tt></a> 函数:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="kn">from</span> <span class="nn">flask.ext.sqlalchemy</span> <span class="kn">import</span> <span class="n">SQLAlchemy</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">SQLAlchemy</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">create_app</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">app</span>
+</pre></div>
+</div>
+<p>它所做的是准备应用以与 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><tt class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></tt></a> 共同工作。然而现在不把 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><tt class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></tt></a> 对象绑定到您的应用。为什么不这么做？ 因为那里可能创建不止一个应用。</p>
+<p>那么 <a class="reference internal" href="api.html#flask.ext.sqlalchemy.SQLAlchemy" title="flask.ext.sqlalchemy.SQLAlchemy"><tt class="xref py py-class docutils literal"><span class="pre">SQLAlchemy</span></tt></a> 是如何知道您的应用的？您必须配置一个应用上下文。如果您在一个 Flask 视图函数中进行工作，这会自动实现。但如果您在交互式的 shell 中，您需要手动这么做。(参阅 <a class="reference external" href="http://flask.pocoo.org/docs/appcontext/#creating-an-application-context">创建应用上下文</a> )。</p>
+<p>简而言之，像这样做:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yourapp</span> <span class="kn">import</span> <span class="n">create_app</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app</span><span class="o">.</span><span class="n">app_context</span><span class="p">()</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>在脚本里面使用 with 声明都样也有作用:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">with</span> <span class="n">app</span><span class="o">.</span><span class="n">app_context</span><span class="p">():</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">User</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Flask-SQLAlchemy 里的一些函数也可以接受要在其上进行操作的应用作为参数:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yourapp</span> <span class="kn">import</span> <span class="n">db</span><span class="p">,</span> <span class="n">create_app</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">db</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">app</span><span class="o">=</span><span class="n">create_app</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+  <img class="logo" src="_static/flask-sqlalchemy-small.png" alt="Logo"
+    style="margin-left: -10px"/>
+</a></p><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="quickstart.html" title="previous chapter">快速入门</a></li>
+      <li>Next: <a href="config.html" title="next chapter">配置</a></li>
+  </ul></li>
+</ul>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/contexts.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2010-2014, Armin Ronacher.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>

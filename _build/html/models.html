@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>声明模型 &mdash; Flask-SQLAlchemy 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Flask-SQLAlchemy 1.0 documentation" href="index.html" />
+    <link rel="next" title="选择(Select),插入(Insert), 删除(Delete)" href="queries.html" />
+    <link rel="prev" title="配置" href="config.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body>
+  
+  
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="queries.html" title="选择(Select),插入(Insert), 删除(Delete)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="配置"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Flask-SQLAlchemy 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="models">
+<span id="id1"></span><h1>声明模型<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+<p>通常下，Flask-SQLAlchemy 的行为就像一个来自 <a class="reference external" href="http://www.sqlalchemy.org/docs/orm/extensions/declarative/api.html#module-sqlalchemy.ext.declarative" title="(in SQLAlchemy v0.9)"><tt class="xref py py-mod docutils literal"><span class="pre">declarative</span></tt></a> 扩展配置正确的 declarative 基类。因此，我们强烈建议您阅读 SQLAlchemy 文档以获取一个全面的参考。尽管如此，我们这里还是给出了最常用的示例。</p>
+<p>需要牢记的事情:</p>
+<ul class="simple">
+<li>您的所有模型的基类叫做 <cite>db.Model</cite>。它存储在您必须创建的 SQLAlchemy 实例上。
+细节请参阅 <a class="reference internal" href="quickstart.html#quickstart"><em>快速入门</em></a>。</li>
+<li>有一些部分在 SQLAlchemy 上是必选的，但是在 Flask-SQLAlchemy 上是可选的。
+比如表名是自动地为您设置好的，除非您想要覆盖它。它是从转成小写的类名派生出来的，即 “CamelCase” 转换为 “camel_case”。</li>
+</ul>
+<div class="section" id="id2">
+<h2>简单示例<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>一个非常简单的例子:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;User </span><span class="si">%r</span><span class="s">&gt;&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span>
+</pre></div>
+</div>
+<p>用 <tt class="xref py py-class docutils literal"><span class="pre">Column</span></tt> 来定义一列。列名就是您赋值给那个变量的名称。如果您想要在表中使用不同的名称，您可以提供一个想要的列名的字符串作为可选第一个参数。主键用 <tt class="docutils literal"><span class="pre">primary_key=True</span></tt> 标记。可以把多个键标记为主键，此时它们作为复合主键。</p>
+<p>列的类型是 <tt class="xref py py-class docutils literal"><span class="pre">Column</span></tt> 的第一个参数。您可以直接提供它们或进一步规定（比如提供一个长度）。下面的类型是最常用的:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><cite>Integer</cite></td>
+<td>一个整数</td>
+</tr>
+<tr class="row-even"><td><cite>String</cite> (size)</td>
+<td>有长度限制的字符串</td>
+</tr>
+<tr class="row-odd"><td><cite>Text</cite></td>
+<td>一些较长的 unicode 文本</td>
+</tr>
+<tr class="row-even"><td><cite>DateTime</cite></td>
+<td>表示为 Python
+<tt class="xref py py-mod docutils literal"><span class="pre">datetime</span></tt> 对象的
+时间和日期</td>
+</tr>
+<tr class="row-odd"><td><cite>Float</cite></td>
+<td>存储浮点值</td>
+</tr>
+<tr class="row-even"><td><cite>Boolean</cite></td>
+<td>存储布尔值</td>
+</tr>
+<tr class="row-odd"><td><cite>PickleType</cite></td>
+<td>存储为一个持久化的 Python 对象</td>
+</tr>
+<tr class="row-even"><td><cite>LargeBinary</cite></td>
+<td>存储一个任意大的二进制数据</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="one-to-many">
+<h2>一对多(one-to-many)关系<a class="headerlink" href="#one-to-many" title="Permalink to this headline">¶</a></h2>
+<p>最为常见的关系就是一对多的关系。因为关系在它们建立之前就已经声明，您可以使用 字符串来指代还没有创建的类(例如如果 <cite>Person</cite> 定义了一个到 <cite>Article</cite> 的关系，而 <cite>Article</cite> 在文件的后面才会声明)。</p>
+<p>关系使用 <a class="reference external" href="http://www.sqlalchemy.org/docs/orm/relationship_api.html#sqlalchemy.orm.relationship" title="(in SQLAlchemy v0.9)"><tt class="xref py py-func docutils literal"><span class="pre">relationship()</span></tt></a> 函数表示。然而外键必须用类 <a class="reference external" href="http://www.sqlalchemy.org/docs/core/constraints.html#sqlalchemy.schema.ForeignKey" title="(in SQLAlchemy v0.9)"><tt class="xref py py-class docutils literal"><span class="pre">sqlalchemy.schema.ForeignKey</span></tt></a> 来单独声明:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s">&#39;Address&#39;</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s">&#39;person&#39;</span><span class="p">,</span>
+                                <span class="n">lazy</span><span class="o">=</span><span class="s">&#39;dynamic&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Address</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">person_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;person.id&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">db.relationship()</span></tt> 做了什么？这个函数返回一个可以做许多事情的新属性。在本案例中，我们让它指向 Address 类并加载多个地址。它如何知道会返回不止一个地址？因为 SQLALchemy 从您的声明中猜测了一个有用的默认值。 如果您想要一对一关系，您可以把 <tt class="docutils literal"><span class="pre">uselist=False</span></tt> 传给 <a class="reference external" href="http://www.sqlalchemy.org/docs/orm/relationship_api.html#sqlalchemy.orm.relationship" title="(in SQLAlchemy v0.9)"><tt class="xref py py-func docutils literal"><span class="pre">relationship()</span></tt></a> 。</p>
+<p>那么 <cite>backref</cite> 和 <cite>lazy</cite> 意味着什么了？<cite>backref</cite> 是一个在 <cite>Address</cite> 类上声明新属性的简单方法。您也可以使用 <tt class="docutils literal"><span class="pre">my_address.person</span></tt> 来获取使用该地址(address)的人(person)。<cite>lazy</cite> 决定了 SQLAlchemy 什么时候从数据库中加载数据:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">'select'</span></tt> (默认值) 就是说 SQLAlchemy 会使用一个标准的 select 语句必要时一次加载数据。</li>
+<li><tt class="docutils literal"><span class="pre">'joined'</span></tt> 告诉 SQLAlchemy 使用 <cite>JOIN</cite> 语句作为父级在同一查询中来加载关系。</li>
+<li><tt class="docutils literal"><span class="pre">'subquery'</span></tt> 类似 <tt class="docutils literal"><span class="pre">'joined'</span></tt> ，但是 SQLAlchemy 会使用子查询。</li>
+<li><tt class="docutils literal"><span class="pre">'dynamic'</span></tt> 在有多条数据的时候是特别有用的。不是直接加载这些数据，SQLAlchemy 会返回一个查询对象，在加载数据前您可以过滤（提取）它们。</li>
+</ul>
+<p>您如何为反向引用（backrefs）定义惰性（lazy）状态？使用 <a class="reference external" href="http://www.sqlalchemy.org/docs/orm/relationship_api.html#sqlalchemy.orm.backref" title="(in SQLAlchemy v0.9)"><tt class="xref py py-func docutils literal"><span class="pre">backref()</span></tt></a> 函数:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">addresses</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s">&#39;Address&#39;</span><span class="p">,</span>
+        <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s">&#39;person&#39;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s">&#39;joined&#39;</span><span class="p">),</span> <span class="n">lazy</span><span class="o">=</span><span class="s">&#39;dynamic&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="many-to-many">
+<h2>多对多(many-to-many)关系<a class="headerlink" href="#many-to-many" title="Permalink to this headline">¶</a></h2>
+<p>如果您想要用多对多关系，您需要定义一个用于关系的辅助表。对于这个辅助表， 强烈建议 <em>不</em>  使用模型，而是采用一个实际的表:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tags</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="s">&#39;tags&#39;</span><span class="p">,</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s">&#39;tag_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;tag.id&#39;</span><span class="p">)),</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="s">&#39;page_id&#39;</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;page.id&#39;</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">tags</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s">&#39;Tag&#39;</span><span class="p">,</span> <span class="n">secondary</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span>
+        <span class="n">backref</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">backref</span><span class="p">(</span><span class="s">&#39;pages&#39;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="s">&#39;dynamic&#39;</span><span class="p">))</span>
+
+<span class="k">class</span> <span class="nc">Tag</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这里我们配置 <cite>Page.tags</cite> 加载后作为标签的列表，因为我们并不期望每页出现太多的标签。而每个 tag 的页面列表（ <cite>Tag.pages</cite>）是一个动态的反向引用。 正如上面提到的，这意味着您会得到一个可以发起 select 的查询对象。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><p class="logo"><a href="index.html">
+  <img class="logo" src="_static/flask-sqlalchemy-small.png" alt="Logo"
+    style="margin-left: -10px"/>
+</a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">声明模型</a><ul>
+<li><a class="reference internal" href="#id2">简单示例</a></li>
+<li><a class="reference internal" href="#one-to-many">一对多(one-to-many)关系</a></li>
+<li><a class="reference internal" href="#many-to-many">多对多(many-to-many)关系</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="config.html" title="previous chapter">配置</a></li>
+      <li>Next: <a href="queries.html" title="next chapter">选择(Select),插入(Insert), 删除(Delete)</a></li>
+  </ul></li>
+</ul>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/models.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  <div class="footer">
+    &copy; Copyright 2010-2014, Armin Ronacher.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  
+  </body>
+</html>
